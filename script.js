@@ -6,6 +6,9 @@ let currentState = {
     originalUrl: ''
 };
 
+// CORS proxy
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+
 // DOM Elements
 const urlInput = document.getElementById('urlInput');
 const loadBtn = document.getElementById('loadBtn');
@@ -79,7 +82,21 @@ function isInstagramUrl(url) {
 }
 
 async function handleWebPage(url) {
-    const response = await fetch(url);
+    // Use CORS proxy to fetch the page
+    const proxyUrl = CORS_PROXY + url;
+    let response;
+    
+    try {
+        response = await fetch(proxyUrl);
+    } catch (err) {
+        // Fallback: try without proxy (for same-origin or permissive CORS)
+        try {
+            response = await fetch(url);
+        } catch (err2) {
+            throw new Error('ページの読み込みに失敗しました。CORS エラーの可能性があります。');
+        }
+    }
+    
     if (!response.ok) {
         throw new Error(`ページの読み込みに失敗しました (${response.status})`);
     }
@@ -95,8 +112,12 @@ async function handleWebPage(url) {
         const src = img.src || img.getAttribute('data-src');
         if (src && !src.includes('data:')) {
             // Convert relative URLs to absolute
-            const absoluteUrl = new URL(src, url).href;
-            currentState.images.push(absoluteUrl);
+            try {
+                const absoluteUrl = new URL(src, url).href;
+                currentState.images.push(absoluteUrl);
+            } catch (err) {
+                // Skip invalid URLs
+            }
         }
     });
 
