@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勝手に絵日記</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>勝手に絵日記</h1>
+        <p>WebページやXのポスト、Instagramを指定すると<br>「画像1枚とテキスト」の様式で表示します。</p>
+        
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="urlInput" 
+                placeholder="URLを入力してください（WebページやX、Instagramなど）"
+                autocomplete="off"
+            >
+            <button id="loadBtn">表示</button>
+        </div>
+
+        <div id="errorMsg" class="error-msg"></div>
+
+        <div id="content" class="content hidden">
+            <div class="image-container">
+                <img id="mainImage" src="" alt="メイン画像" />
+                <div id="imageNav" class="image-nav hidden">
+                    <button id="prevBtn">← 前の画像</button>
+                    <span id="imageCount"></span>
+                    <button id="nextBtn">次の画像 →</button>
+                </div>
+            </div>
+            
+            <div class="text-container">
+                <div id="textContent"></div>
+                <p class="source-url">
+                    元のURL: <a id="sourceLink" href="" target="_blank"></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
